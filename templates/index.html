@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Future Funds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Each age group is a colour "world", switched with body[data-theme] */
+body{--bg:#E4F4DC;--ink:#15301D;--mute:#486452;--ac:#2F9E44;--ac2:#FFC93C;--card:#FFFFFF}
+body[data-theme=young]{--bg:#FCE6F0;--ink:#3A1128;--mute:#7A4A63;--ac:#D9246E;--ac2:#FFB020}
+body[data-theme=mid]{--bg:#E1EAFB;--ink:#0F2347;--mute:#475B80;--ac:#2F62E8;--ac2:#00BFA5}
+body[data-theme=senior]{--bg:#E9E4F8;--ink:#241A46;--mute:#5B5180;--ac:#6A47DB;--ac2:#F2A93B}
+body{--line:color-mix(in srgb,var(--ink) 16%,transparent);--soft:color-mix(in srgb,var(--ac) 12%,var(--card));--ring2:color-mix(in srgb,var(--ac) 52%,#fff)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Figtree,system-ui,sans-serif;transition:background .5s,color .5s}
+h1,h2,h3{font-family:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;line-height:1.12;margin:0 0 .5rem}
+h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;letter-spacing:-.02em}h2{font-size:1.7rem}h3{font-size:1.15rem}
+p{max-width:64ch;margin:.4rem 0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 20px}
+.brand{font:800 1.1rem "Bricolage Grotesque",sans-serif}
+.xp{display:flex;align-items:center;gap:10px;font-size:.9rem;font-weight:600}
+.bar{width:110px;height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .4s}
+.hero{padding:56px 0 34px;background:repeating-radial-gradient(circle at 92% 30%,transparent 0 22px,color-mix(in srgb,var(--ac) 16%,transparent) 22px 27px,transparent 27px 52px);transition:background .5s}
+.hero p{font-size:1.15rem;color:var(--mute)}
+.rule{display:inline-block;margin-top:12px;padding:9px 16px;background:var(--card);border:2px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink)}
+section{padding:34px 0}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0 22px}
+.tab{text-align:left;padding:14px;border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:16px;cursor:pointer;font:inherit;transition:transform .15s,box-shadow .15s}
+.tab:hover{transform:translateY(-2px)}
+.tab span{font-size:2rem;display:block;line-height:1.1}.tab b{font-family:"Bricolage Grotesque",sans-serif;font-size:1.1rem}.tab small{display:block;color:var(--mute)}
+.tab[aria-selected=true]{background:var(--ac);color:#fff;box-shadow:5px 5px 0 var(--ink)}.tab[aria-selected=true] small{color:#fff}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.panel{background:var(--card);border:2px solid var(--ink);border-radius:20px;padding:24px;box-shadow:7px 7px 0 var(--ink)}
+.goal{display:inline-block;margin:8px 0;padding:6px 14px;border-radius:99px;background:var(--ac2);color:#2A1D00;font-weight:700;border:2px solid var(--ink)}
+.goal.done{background:var(--ac);color:#fff}
+.grid{display:grid;grid-template-columns:minmax(240px,330px) 1fr;gap:28px;margin-top:18px;align-items:center}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+label{display:flex;justify-content:space-between;font-size:.93rem;font-weight:600;margin-top:14px}
+input[type=range]{width:100%;accent-color:var(--ac)}
+#chart svg{width:100%;height:auto;max-height:420px;display:block;animation:grow .6s ease-out}
+@keyframes grow{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+.r1{fill:var(--ac)}.r2{fill:var(--ring2)}
+.lbl{font:700 11px Figtree,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:3px}
+.hint{font-size:.85rem;color:var(--mute);text-align:center}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:16px}
+.stat{background:var(--soft);border-radius:14px;padding:10px 14px}
+.stat small{color:var(--mute)}.stat b{display:block;font:800 1.3rem "Bricolage Grotesque",sans-serif}
+.delay{margin-top:16px;padding:14px 16px;border-left:6px solid var(--ac2);background:var(--soft);border-radius:0 14px 14px 0}
+.game{margin:14px 0 6px;padding:16px;border:2px dashed var(--ink);border-radius:16px;background:var(--soft)}
+.plant{font-size:2rem;line-height:1;min-height:5rem;display:flex;align-items:flex-end}
+.track{height:16px;background:var(--line);border-radius:99px;overflow:hidden;margin:4px 0 10px}
+.track i{display:block;height:100%;width:0;transition:width .35s}
+.btn{padding:10px 18px;border:2px solid var(--ink);border-radius:12px;background:var(--ac);color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.alt{background:var(--card);color:var(--ink)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:14px}
+.myth{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:16px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);transition:transform .2s}
+.myth:nth-child(odd){transform:rotate(-.8deg)}.myth:nth-child(even){transform:rotate(.8deg)}.myth:hover,.myth.open{transform:none}
+.myth .tag{font-weight:700}.myth .tag::before{content:"🙅 "}.myth.open .tag::before{content:"✅ "}
+.myth .ans{display:none;margin-top:8px;padding-top:8px;border-top:2px dotted var(--line)}.myth.open .ans{display:block}
+.benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:14px}
+.benefit{padding:16px;border-radius:16px;background:var(--card);border:2px solid var(--ink)}
+.benefit:nth-child(3n+1){background:var(--ac2)}.benefit:nth-child(3n+2){background:var(--ring2)}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:11px 14px;border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:12px;font:inherit;cursor:pointer}
+.opt.good{background:var(--ac);color:#fff}.opt.bad{background:var(--card);text-decoration:line-through;opacity:.7}
+.quiz-win{display:inline-flex;align-items:center;gap:8px;margin:10px 0;padding:9px 14px;border:2px solid var(--ink);border-radius:999px;background:var(--ac2);color:var(--ink);font-weight:800;box-shadow:3px 3px 0 var(--ink);animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+.quiz-try{display:inline-flex;align-items:center;gap:8px;margin:10px 0;padding:9px 14px;border:2px solid var(--ink);border-radius:999px;background:var(--ring2);color:var(--ink);font-weight:800;box-shadow:3px 3px 0 var(--ink);animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+.quiz-result{text-align:center;padding:20px;border:2px solid var(--ink);border-radius:18px;background:var(--soft);box-shadow:4px 4px 0 var(--ink);animation:pop .35s ease-out}
+.quiz-result .trophy{font-size:2.5rem;line-height:1.2}
+.quiz-result h3{margin:8px 0}
+.quiz-score{display:inline-block;margin:8px 0;padding:6px 16px;border-radius:999px;background:var(--ac2);font-size:1.2rem;font-weight:800}
+.quiz-result p{margin:6px auto 16px}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+footer{padding:26px 0 50px;color:var(--mute);font-size:.9rem;border-top:2px solid var(--ink)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body data-theme="young">
+<header class="top"><div class="wrap">
+  <div class="brand">🌳 Future Funds</div>
+  <div class="xp" aria-live="polite"><span id="lvl">Seedling</span><div class="bar"><i id="xpbar"></i></div><span id="xp">0 XP</span></div>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <h1>Every year adds a ring.<br>Later rings grow thicker.</h1>
+  <p>That is compounding: your returns start earning returns. Pick your age group, play with the sliders, and watch your money grow like a tree.</p>
+  <div class="rule"><b>Rule of 72:</b> divide 72 by the yearly return to estimate the years to double. At 8%, about 9 years.</div>
+</div></div>
+
+<main class="wrap">
+<section id="play">
+  <h2>1. Choose your world</h2>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="panel" id="panel"></div>
+</section>
+
+<section id="myths">
+  <h2>2. Myth busters</h2>
+  <p>Tap a card to reveal the truth. Each new reveal earns 10 XP.</p>
+  <div class="cards" id="myths-list"></div>
+</section>
+
+<section id="benefits">
+  <h2>3. Why investors love compounding</h2>
+  <div class="benefits" id="benefit-list"></div>
+</section>
+
+<section id="quiz">
+  <h2>4. Boss quiz</h2>
+  <div class="panel" id="quizbox"></div>
+</section>
+</main>
+
+<footer><div class="wrap">Educational tool only, not financial advice. Returns shown are assumptions and are not guaranteed. Investments can lose value.</div></footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const inr=n=>{n=Math.round(n);if(n>=1e7)return '₹'+(n/1e7).toFixed(2)+' Cr';if(n>=1e5)return '₹'+(n/1e5).toFixed(2)+' L';return '₹'+n.toLocaleString('en-IN')};
+const API_URLS={{ (api_urls|default({'projection':'/api/projection','profiles':'/api/profiles','content':'/api/content'}))|tojson }};
+const api=async p=>(await fetch(API_URLS.projection+'?'+new URLSearchParams(p))).json();
+const SL=[['principal','Starting amount',0,5000000,10000,inr],['monthly','Monthly saving',0,100000,500,inr],
+ ['rate','Yearly return (assumed)',1,15,0.5,v=>v+'%'],['years','Years invested',1,40,1,v=>v+' yrs'],['fee','Yearly cost / fee',0,3,0.1,v=>(+v).toFixed(1)+'%']];
+const LEVELS=['Seedling','Sapling','Young tree','Old oak','Forest'];
+let xp=0,PROFILES=[],cur=null,vals={},delay=0,doneGoals=new Set(),seenMyths=new Set();
+
+function addXP(n){xp+=n;const l=Math.min(Math.floor(xp/100),4);$('#xp').textContent=xp+' XP';$('#lvl').textContent=LEVELS[l];$('#xpbar').style.width=(l===4?100:xp%100)+'%'}
+
+/* Tree-ring chart: ring radius ~ sqrt(balance), so ring area ~ money. One ring per year. */
+function rings(d){
+  const n=d.year.length-1,max=d.compound[n]||1,cx=200,cy=190,R=175,rad=v=>R*Math.sqrt(Math.max(v,0)/max),step=Math.max(1,Math.ceil(n/5));
+  let s='';
+  for(let i=n;i>=1;i--)s+=`<circle class="${i%2?'r1':'r2'}" cx="${cx}" cy="${cy}" r="${rad(d.compound[i]).toFixed(1)}" stroke="var(--card)" stroke-width="1.5"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${rad(d.contributed[n]).toFixed(1)}" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="6 5"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="3" fill="var(--ink)"/>`;
+  for(let i=1;i<=n;i++){const r=rad(d.compound[i]);if((i%step===0||i===n)&&r>26){s+=`<text class="lbl" x="${(cx+r*.707+3).toFixed(1)}" y="${(cy-r*.707-3).toFixed(1)}">Year ${i}</text>`}}
+  $('#chart').innerHTML=`<svg viewBox="0 0 400 380" role="img" aria-label="Tree-ring chart: each ring is one year of growth">${s}</svg>
+   <p class="hint">Each ring = 1 year. Dashed circle = only the money you put in. Everything outside it is growth.</p>`;
+}
+
+async function update(){
+  const d=await api(vals),n=d.compound.length-1;
+  rings(d);
+  const gain=d.compound[n]-d.contributed[n],extra=d.compound[n]-d.simple[n],lastYear=d.compound[n]-d.compound[n-1]-vals.monthly*12;
+  $('#stats').innerHTML=`<div class="stat"><small>You put in</small><b>${inr(d.contributed[n])}</b></div>
+   <div class="stat"><small>Final value</small><b>${inr(d.compound[n])}</b></div>
+   <div class="stat"><small>Growth earned</small><b>${inr(gain)}</b></div>
+   <div class="stat"><small>Earned in year ${n} alone</small><b>${inr(lastYear)}</b></div>
+   <div class="stat"><small>Bonus vs simple interest</small><b>${inr(extra)}</b></div>`;
+  const ok=d.compound[n]>=cur.goal,gl=$('#goal');
+  gl.classList.toggle('done',ok);gl.textContent=(ok?'🏆 Goal reached: ':'🎯 Goal: ')+cur.goal_text;
+  if(ok&&!doneGoals.has(cur.id)){doneGoals.add(cur.id);addXP(100);$('#msg').textContent='Goal cleared! +100 XP. Now try reaching it with a lower monthly amount.'}
+  const dl=Math.min(delay,vals.years-1);
+  if(dl>0){const w=await api({...vals,years:vals.years-dl}),wf=w.compound[w.compound.length-1];
+    $('#delaytxt').innerHTML=`Waiting <b>${dl} year${dl>1?'s':''}</b> cuts your final value from ${inr(d.compound[n])} to <b>${inr(wf)}</b>. That is <b>${inr(d.compound[n]-wf)}</b> lost.`}
+  else $('#delaytxt').textContent='Slide to see what waiting costs you.';
+}
+
+function selectProfile(id){
+  cur=PROFILES.find(p=>p.id===id);vals={...cur.defaults};delay=0;document.body.dataset.theme=id;
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.id===id));
+  $('#panel').innerHTML=`<h3>${cur.emoji} ${cur.name} <small style="color:var(--mute);font-weight:400">${cur.ages}</small></h3>
+   <p>${cur.story}</p><div class="goal" id="goal"></div><p id="msg" aria-live="polite"><i>${cur.tip}</i></p>
+   <div class="grid"><div id="sliders"></div><div id="chart"></div></div>
+   <div class="stats" id="stats"></div>
+   <div class="delay"><b>Cost of waiting</b><label for="dl" style="margin-top:6px"><span>Start later by</span><span id="dlv">0 yrs</span></label>
+   <input id="dl" type="range" min="0" max="10" value="0"><p id="delaytxt"></p></div>`;
+  $('#sliders').innerHTML=SL.map(([k,t,mn,mx,st])=>`<label for="s_${k}"><span>${t}</span><b id="v_${k}"></b></label><input id="s_${k}" type="range" min="${mn}" max="${mx}" step="${st}" value="${vals[k]}">`).join('');
+  SL.forEach(([k,,,,,f])=>{const el=$('#s_'+k),sh=()=>$('#v_'+k).textContent=f(vals[k]);sh();
+    el.oninput=()=>{vals[k]=+el.value;sh();update()}});
+  $('#dl').oninput=e=>{delay=+e.target.value;$('#dlv').textContent=delay+' yrs';update()};
+  update();
+}
+
+async function init(){
+  PROFILES=await (await fetch(API_URLS.profiles)).json();
+  const C=await (await fetch(API_URLS.content)).json();
+  $('#tabs').innerHTML=PROFILES.map(p=>`<button class="tab" role="tab" data-id="${p.id}"><span>${p.emoji}</span><b>${p.name}</b><small>${p.ages}</small></button>`).join('');
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>selectProfile(t.dataset.id));
+  $('#myths-list').innerHTML=C.myths.map(([m,a],i)=>`<button class="myth" data-i="${i}"><div class="tag">Myth: ${m}</div><div class="ans"><b>Reality:</b> ${a}</div></button>`).join('');
+  document.querySelectorAll('.myth').forEach(b=>b.onclick=()=>{b.classList.toggle('open');if(!seenMyths.has(b.dataset.i)){seenMyths.add(b.dataset.i);addXP(10)}});
+  $('#benefit-list').innerHTML=C.benefits.map(([t,d])=>`<div class="benefit"><h3>${t}</h3><p>${d}</p></div>`).join('');
+  quiz(C.quiz);selectProfile(PROFILES[0].id);
+}
+
+function quiz(Q){
+  let i=0,score=0;const box=$('#quizbox');
+  const render=()=>{
+    if(i>=Q.length){const pct=score/Q.length;
+      const title=pct===1?'You’re a compounding champion!':pct>=.6?'Great growing!':'Every answer helps you grow!';
+      const message=pct===1?'You got every question right. Keep that money knowledge growing!':pct>=.6?'You’ve got the key ideas. Play another round to see if you can get them all.':'Nice start! Try another round and keep learning as you go.';
+      const emoji=pct===1?'🏆':pct>=.6?'🌳':'🌱';
+      box.innerHTML=`<div class="quiz-result"><div class="trophy" aria-hidden="true">${emoji}</div><h3>${title}</h3><div class="quiz-score">${score} of ${Q.length} correct</div><p>${message}</p><button class="btn" id="again">Play again 🌱</button></div>`;
+      $('#again').onclick=()=>{i=0;score=0;render()};return}
+    const q=Q[i];box.innerHTML=`<p><b>Question ${i+1} of ${Q.length}</b></p><h3>${q.q}</h3>`+q.o.map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')+`<p id="fb" aria-live="polite"></p>`;
+    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;
+      box.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+      box.querySelectorAll('.opt')[q.a].classList.add('good');
+      if(k===q.a){score++;addXP(20);$('#fb').innerHTML='<span class="quiz-win">🎉 Correct!<span>+20 XP</span></span>'}else{b.classList.add('bad');$('#fb').innerHTML='<span class="quiz-try">💡 Almost! The green answer is right. Keep going!</span>'}
+      const nx=document.createElement('button');nx.className='btn';nx.textContent=i+1<Q.length?'Next question':'See result';nx.onclick=()=>{i++;render()};box.appendChild(nx)});
+  };render();
+}
+init();
+</script>
+</body>
+</html>
